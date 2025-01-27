@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Студенты <sup class="text-muted fs-6">({{ students.count }})</sup>
+  </span>
+  <a href="{% url 'student-create' %}" class="btn btn-primary no-print">Создать</a>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Курс</th>
+            <th>Группа</th>
+            <th>Оплата</th>
+            <th>Допуск</th>
+            <th style="width: 30px;">Статус</th>
+            <th style="width: 30px;">Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <div class="modal fade" id="modalCenter-{{ student.id }}" tabindex="-1" style="display: none;"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalCenterTitle">Удаление группы</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Удалить группу {{ student.title }}?
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'student-delete' student.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <tr>
+            <td>
+              <a href="{% url 'student-details' student.id %}">{{ student.name }}</a>
+            </td>
+            <td>
+              <span>{{ student.phone }}</span>
+            </td>
+            <td><span class="">{{ student.group.first.course.title }}</span></td>
+            <td><span class="">{% for i in student.group.all %}
+              {{ i }}
+              {% endfor %}
+              </span></td>
+            <td><span class="">{{ student.payed }}/{{ student.to_pay }}</span></td>
+            <td>
+              {% if student.semester_access %}
+              <span class="badge bg-success">Есть</span></td>
+              {% else %}
+              <span class="badge bg-danger">Нет</span></td>
+              {% endif %}
+            <td>
+              {% if student.status %}
+                <span class="badge bg-success">Обучается</span>
+              {% else %}
+                <span class="badge bg-danger">Не обучается</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
+                    class="bx bx-dots-vertical-rounded"></i></button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalCenter-{{ student.id }}">
+                    <i class="bx bx-trash me-1"></i>
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

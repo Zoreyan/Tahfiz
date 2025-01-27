@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Студенты <sup class="text-muted fs-6">({{ students.count }})</sup>
+  </span>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Курс</th>
+            <th>Группа</th>
+            <th style="width: 30px;">Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <div class="modal fade" id="modalCenter-{{ student.id }}" tabindex="-1" style="display: none;"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalCenterTitle">Удаление группы</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Удалить группу {{ student.title }}?
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'student-delete' student.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <tr>
+            <td>
+              <span>{{ student.name }}</span>
+            </td>
+            <td>
+              <span>{{ student.phone }}</span>
+            </td>
+            <td><span class="">{{ student.group.course.title }}</span></td>
+            <td><span class="">{{ student.group.title }}</span></td>
+            <td>
+              {% if student.status %}
+                <span class="badge bg-success">Обучается</span>
+              {% else %}
+                <span class="badge bg-danger">Не обучается</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

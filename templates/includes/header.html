@@ -1,0 +1,121 @@
+{% load static %}
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+  id="layout-navbar">
+  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
+    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+      <i class="bx bx-menu bx-sm"></i>
+    </a>
+  </div>
+  <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+
+
+    <ul class="navbar-nav flex-row align-items-center ms-auto">
+          
+
+          
+          <!-- Place this tag where you want the button to render. -->
+      <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
+        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+          <i class='bx bx-sm'></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
+          <li>
+            <a class="dropdown-item" href="javascript:void(0);" data-theme="light">
+              <span class="align-middle"><i class='bx bx-sun me-2'></i>Светлаю</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="javascript:void(0);" data-theme="dark">
+              <span class="align-middle"><i class="bx bx-moon me-2"></i>Темная</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="javascript:void(0);" data-theme="system">
+              <span class="align-middle"><i class="bx bx-desktop me-2"></i>Системная</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li>
+        <!-- User -->
+        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+          <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="avatar avatar-online">
+              {% if request.user.student.image %}
+              <img src="{{ request.user.student.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+            {% elif request.user.teacher.image %}
+              <img src="{{ request.user.teacher.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+            {% elif request.user.administrator.image %}
+              <img src="{{ request.user.administrator.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+            {% else %}
+              <img src="{% static 'assets/img/logo/logo.png' %}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+            {% endif %}
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="avatar avatar-online">
+                      {% if request.user.student.image %}
+                        <img src="{{ request.user.student.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+                      {% elif request.user.teacher.image %}
+                        <img src="{{ request.user.teacher.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+                      {% elif request.user.administrator.image %}
+                        <img src="{{ request.user.administrator.image.url }}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+                      {% else %}
+                        <img src="{% static 'assets/img/logo/logo.png' %}" class="rounded-circle" width="30" height="30" style="object-fit: cover;" alt="">
+                      {% endif %}  
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    {% if request.user.role == 'administrator' %}
+                    <h6 class="mb-0">{{ request.user.administrator.name }}</h6>
+                    <small class="text-muted">{{ request.user.get_role_display }}</small>
+
+                    {% elif request.user.role == 'admin' %}
+                      <h6 class="mb-0">{{ request.user.admin.name|truncatewords:1 }}</h6>
+                                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                    {% elif request.user.role == 'teacher' %}
+                      <h6 class="mb-0">{{ request.user.teacher.name|truncatewords:1 }}</h6>
+                                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                    {% elif request.user.role == 'student' %}
+                      <h6 class="mb-0">{{ request.user.student.name|truncatewords:1 }}</h6>
+                                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider my-1"></div>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'user-update' %}">
+                <i class="bx bx-user me-3"></i><span>Изменить имя пользователя</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'password_change' %}">
+                <i class="bx bx-edit-alt me-3"></i><span>Изменить пароль</span>
+              </a>
+            </li>
+
+            <li>
+              <div class="dropdown-divider my-1"></div>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="bx bx-power-off me-3"></i><span>Выход</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <!--/ User -->
+          
+
+        </ul>
+  </div>
+</nav>

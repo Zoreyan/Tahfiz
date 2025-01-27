@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-between mb-3">
+    <div class="col-md-6">
+        <span class="fs-3 fw-bold">Журнал {{ group.title }} - "{{ subject }}"</span>
+    </div>
+
+    <div class="col-md-6 text-md-end">
+        <form method="get" class="mb-4">
+            <div class="row g-2 justify-content-md-end align-items-center">
+                <div class="col-auto">
+                    <input type="month" name="month" value='{{ date }}' class="form-control">
+                </div>
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 5%;">№</th>
+            <th style="width: 35%;">Студент</th>
+            {% for day in days %}
+                <th style="width: 5%;" class='text-center'>{{ day|date:"d" }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for student in students %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+            <div class="text-start">
+                <span data-bs-toggle="modal" data-bs-target="#modalCenter{{student.id}}" class="fw-bold text-primary" style="cursor: pointer;">
+                    {{ student.name }}
+                </span>
+            </div>
+        </td>
+        {% for day in days %}
+        <td class='text-center'>
+            {% with student.grade_set.all as grades %}
+                {% for grade in grades %}
+                    {% if grade.subject == subject and grade.date == day %}
+                        <span type="button" class="" data-bs-toggle="modal" data-bs-target="#basicModal{{ grade.id }}">
+                            {{ grade.mark }}
+                        </span>
+                        <div class="modal fade" id="basicModal{{ grade.id }}" tabindex="-1" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel1">Удаление оценки</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Вы действительно желаете удалить эту оценку?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
+                  <a href="{% url 'grade-delete' group.id subject.id grade.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+                    {% endif %}
+                {% endfor %}
+            {% if not grades %}
+                <div>—</div>
+            {% endif %}
+            {% endwith %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% for student in students %}
+<div class="modal fade" id="modalCenter{{student.id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form method="POST" class="modal-content">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Оценка для {{ student.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="student_id" value="{{ student.id }}">
+                <input class="form-control mb-3" name="mark" type='number' placeholder="Укажите оценку" required/>
+                <input class="form-control mb-3" name="pages" type='number' placeholder="Укажите кол-во страниц(не обязательно)"/>
+                <input type="date" name="date" placeholder="Укажите дату" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="submit" class="btn btn-primary">Готово</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

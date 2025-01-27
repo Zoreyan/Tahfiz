@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Группы <sup class="text-muted fs-6">({{ groups.count }})</sup>
+  </span>
+  {% if request.user.role != 'student' %}
+  <a href="{% url 'group-create' %}" class="btn btn-primary no-print">Создать</a>
+  {% endif %}
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th style="width: 30px;">Курс</th>
+            <th>Преподаватели</th>
+            <th>Студенты</th>
+            <th style="width: 30px;">Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for group in groups %}
+          <div class="modal fade" id="modalCenter-{{ group.id }}" tabindex="-1" style="display: none;"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalCenterTitle">Удаление группы</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Удалить группу {{ group.title }}?
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'group-delete' group.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <tr>
+            <td>
+              <a href="{% url 'group-details' group.id %}">{{ group.title }}</a>
+            </td>
+            <td><span class="">{{ group.course }}</span></td>
+            <td>
+              <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
+                {% for teacher in group.teacher_set.all %}
+                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                  class="avatar avatar-xs pull-up" aria-label="{{ teacher.name }}"
+                  data-bs-original-title="{{ teacher.name }}">
+                  <img
+                    src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
+                    alt="Avatar" class="rounded-circle">
+                </li>
+                {% endfor %}
+              </ul>
+            </td>
+            <td>
+              <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
+                {% for student in group.student_set.all %}
+                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                  class="avatar avatar-xs pull-up" aria-label="{{ student.name }}"
+                  data-bs-original-title="{{ student.name }}">
+                  <img
+                    src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
+                    alt="Avatar" class="rounded-circle">
+                </li>
+                {% endfor %}
+              </ul>
+            </td>
+            <td>
+              {% if request.user.role != 'student' %}
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
+                    class="bx bx-dots-vertical-rounded"></i></button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'group-update' group.id %}"><i class="bx bx-edit-alt me-1"></i>Изменить</a>
+                  <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalCenter-{{ group.id }}">
+                    <i class="bx bx-trash me-1"></i>
+                    Удалить
+                  </button>
+                </div>
+              </div>
+              {% else %}
+              -
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

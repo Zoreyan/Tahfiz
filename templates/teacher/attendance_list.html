@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+    <div class="d-flex align-items-center gap-3">
+    <span class="fs-3 fw-bold">Посещаемость</span>
+      <form method="get" class="col-md-3">
+        <div class="d-flex align-items-center gap-2">
+          <input class="form-control" type="date" value="{{ current_year }}-{{ current_month }}-{{current_day }}" id="html5-month-input" name="date" id="html5-date-input">
+          <button class="btn btn-primary">Фильтр</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <table class="table table-striped mt-5" style="overflow-x: scroll;">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Ф.И.О</th>
+        <th scope="col">Приходил в</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in attendance_list %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><span class="fw-bold">{{ i.teacher.name }}</span></td>
+        
+        <td>
+          <span class="text-success">
+            {{ i.date|date:'H:i' }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  
+  </table>
+{% endblock %}

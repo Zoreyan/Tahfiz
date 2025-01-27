@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Удаление группы</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить эту группу?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                <a href="{% url 'group-delete' group.id %}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0">Информация о группе</h5>
+                <div class="dropdown">
+                    <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
+                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#basicModal">Удалить</button></li>
+                        <li><a class="dropdown-item" href="{% url 'group-update' group.id %}">Изменить</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <small class="text-muted">Название</small>
+                        <div>{{ group.title }}</div>
+                    </li>
+                    <li class="mb-2">
+                        <small class="text-muted">Курс</small>
+                        <div>{{ group.course.title }}</div>
+                    </li>
+                    <li>
+                        {% for subject in subject_count %}
+                            <span class='badge bg-label-primary me-1'>{{ subject.subject__name }}: {{ subject.total }} уроков</span>
+                        {% endfor %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="nav-align-top mb-4">
+            <ul class="nav nav-pills me-4 mb-4 d-flex flex-wrap" role="tablist">
+                {% for day in days %}
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link {% if day.id == 1 %}active{% endif %} small" role="tab" data-bs-toggle="tab" data-bs-target="#day{{ day.id }}" aria-controls="navs-pills-left-home" aria-selected="true" tabindex="-1">
+                            {{ day.title }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="tab-content">
+                {% for day in days %}
+                    <div class="tab-pane fade {% if day.id == 1 %}show active{% endif %}" id="day{{ day.id }}" role="tabpanel">
+                        <div class="row">
+                            {% for schedule in schedules %}
+                                {% if schedule.group == group and schedule.day == day %}
+                                    <div class="col-md-12 col-xl-6 mb-2">
+                                        <div class="card bg-primary text-white h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ schedule.time_slot }}. {{ schedule.subject.name }}</h5>
+                                                <p class="card-text">
+                                                    {% for teacher in schedule.subject.teacher_set.all %}
+                                                        <span>{{ teacher.name }}</span>{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row gy-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">Список преподавателей <sup>({{ teachers.count }})</sup></h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Телефон</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in teachers %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'teacher-details' teacher.id %}">{{ teacher.name }}</a>
+                                </td>
+                                <td>{{ teacher.phone }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title">Список студентов <sup>({{ students.count }})</sup></h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Имя</th>
+                                <th>Телефон</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'student-details' student.id %}">{{ student.name }}</a>
+                                </td>
+                                <td>{{ student.phone }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

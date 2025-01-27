@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-between mb-3">
+    <span class="fs-3 fw-bold">Расписание</span>
+    <button onclick="window.print()" class="no-print btn btn-primary">Распечатать</button>
+</div>
+<div id="printTable">
+    <table class="table table-bordered">
+        <tr>
+            <th>Группа</th>
+            {% for day in days %}
+            <th>{{ day.title }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for group in groups %}
+        <tr>
+            <td>
+                <a href="{% url 'group-details' group.id %}">{{ group.title }}</a>
+            </td>
+            {% for day in days %}
+            <td style="text-align: initial;">
+                {% for schedule in schedules %}
+                    <div class="modal fade" id="modalCenter{{schedule.id}}" tabindex="-1" style="display: none;"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalCenterTitle">Удаление предмета из шкалы</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Вы действительно желаете удалить этот предмет {{ schedule.time_slot }}.{{schedule.subject.name }}?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-label-secondary"
+                                        data-bs-dismiss="modal">Закрыть</button>
+                                    <a href='{% url "schedule-delete" schedule.id %}' class='btn btn-danger'>Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   <div class='mb-1'>
+                     {% if schedule.group == group and schedule.day == day %}
+                        {% if request.user.role == 'admin' or request.user.role == 'administrator' %}
+                            <div class="" data-bs-toggle="modal" data-bs-target="#modalCenter{{schedule.id}}">
+                            <span>{{ schedule.time_slot }}.{{ schedule.subject.name }}</span>
+                            </div>
+                        {% else %}
+                            <span class="">{{ schedule.time_slot }}.{{ schedule.subject.name }}</span>
+                        {% endif %}
+                    {% endif %}
+                   </div>
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #printTable,
+        #printTable * {
+            visibility: visible;
+        }
+
+        #printTable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        
+        .no-print {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}

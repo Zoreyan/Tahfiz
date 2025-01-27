@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if messages %}
+<div class="bs-toast toast toast-placement-ex m-2 fade bg-success top-0 end-0 show" role="alert" aria-live="assertive"
+    aria-atomic="true" data-bs-delay="2000">
+    <div class="toast-header">
+        <i class="bx bx-bell me-2"></i>
+        <div class="me-auto fw-medium">Уведомление</div>
+        <small>Только что</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        {% for message in messages %}
+        <div class="">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+    <div class="row m-0 justify-content-center">
+      <div class='col-5 mt-5'>
+        <div class="card">
+            <div class="card-body">
+              <form id="formAuthentication" class="mb-3" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="username" class="form-label">Новое имя пользователя</label>
+                  <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Введите новое имя пользователя" autofocus value='{{ request.user.username }}'>
+                <div class="mb-3">
+                  <button class="btn btn-primary d-grid w-100" type="submit">Сохранить</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+    </div>
+{% endblock %}
