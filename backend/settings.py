@@ -79,27 +79,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'cl17008_ksta7',
-#         'USER': 'cl17008_ksta7',
-#         'PASSWORD': 'Knyaz999',
-#         'HOST': 'localhost',
-#         'OPTIONS': {
-#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-#     },
-#         'PORT': '3306',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cl17008_ksta7',
+        'USER': 'cl17008_ksta7',
+        'PASSWORD': 'Knyaz999',
+        'HOST': 'localhost',
+        'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+    },
+        'PORT': '3306',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
