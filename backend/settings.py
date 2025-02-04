@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     # apps
+    'apps.api',
     'apps.user',
     'apps.dashboard',
     'apps.student',
