@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+<div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-10 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Создание группы</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label" for="group-title">Название</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="group-course">Курс</label>
+                        {{ form.course }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Создать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

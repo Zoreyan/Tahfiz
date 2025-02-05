@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row">
+            <div class="col-6 mx-auto">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Изменение группы</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="basic-default-fullname">Название</label>
+                                        {{ form.title }}
+                                    </div>
+                                </div>
+                               <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-company">Курс</label>
+                                    {{ form.course }}
+                                </div>
+                               </div>
+                            </div>
+                                
+                            <button type="submit" class="btn btn-primary w-100">Изменить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

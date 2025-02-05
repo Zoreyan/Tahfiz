@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Журнал <sup class="text-muted fs-6">Выберите группу</sup>
+  </span>
+</div>
+<div class='row'>
+    {% for group in groups %}
+    <div class="col-md-6 col-xl-3 mb-2">
+    <a href="{% url 'grade-subject-list' group.id %}"  class="card bg-primary  text-white">
+      <div class="card-body">
+        <h5 class="card-title text-white">{{ group.title }}</h5>
+        <p class="card-text">
+          Студентов: {{ group.student_set.count }}
+        </p>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

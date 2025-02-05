@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-between mb-3">
+    <div class="col-md-6">
+        <span class="fs-3 fw-bold">Дневник</span>
+    </div>
+
+    <div class="col-md-6 text-md-end">
+        <form method="get" class="mb-4">
+            <div class="row g-2 justify-content-md-end align-items-center">
+                <div class="col-auto">
+                    <input type="month" name="month" value='{{ date }}' class="form-control">
+                </div>
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="width: 5%;">№</th>
+            <th style="width: 35%;">Предмет</th>
+            {% for day in days %}
+                <th style="width: 5%;" class='text-center'>{{ day|date:"d" }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for subject in subjects %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+            <div class="text-start">
+                <span data-bs-toggle="modal" data-bs-target="#modalCenter{{student.id}}" class="fw-bold text-primary" style="cursor: pointer;">
+                    {{ subject.name }}
+                </span>
+            </div>
+        </td>
+        {% for day in days %}
+        <td class='text-center'>
+            {% with student.grade_set.all as grades %}
+                {% for grade in grades %}
+                    {% if grade.subject == subject and grade.date == day %}
+                        <div>{{ grade.mark }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

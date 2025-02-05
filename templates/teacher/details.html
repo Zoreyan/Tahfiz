@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="modal fade" id="modalCenter" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterTitle">Удаление</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Вы действительно желаете удалить учителя <u>{{ teacher.name }}</u>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <a href="{% url 'teacher-delete' teacher.id %}" class="btn btn-danger">Удалить</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card mb-4">
+      <div class="card-body">
+        <form id="formAccountSettings" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-6 text-center">
+              {% if teacher.image %}
+                <img src="{{ teacher.image.url }}" class="rounded-circle" width="150" height="150" style="object-fit: cover;" alt="">
+              {% else %}
+                <img src="{% static 'assets/img/logo/logo.png' %}" class="rounded-circle" width="150" height="150" style="object-fit: cover;" alt="">
+              {% endif %}
+            </div>
+          </div>
+          <div class="row align-items-center justify-content-center">
+            <div class="mb-3 col-md-12">
+              <label for="name" class="form-label">Изображение</label>
+              {{ form.image }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label for="name" class="form-label">Полное имя</label>
+              {{ form.name }}
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="phone" class="form-label">Контактный номер</label>
+              {{ form.phone }}
+            </div>
+            <div class="mb-3">
+              <div class="accordion-item card p-3">
+                <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1" aria-expanded="false">
+                    Предметы
+                  </button>
+                </h2>
+        
+                <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+                  <div class="accordion-body">
+                    {{ form.subjects }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="accordion-item card p-3">
+                <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                  <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-2" aria-controls="accordionIcon-2" aria-expanded="false">
+                    Группы
+                  </button>
+                </h2>
+        
+                <div id="accordionIcon-2" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+                  <div class="accordion-body">
+                    {{ form.group }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+                <label for="login" class="form-label">Логин:</label>
+                {{ teacher.user.username }}
+              </div>
+            <div class="mb-3">
+              <label for="login" class="form-label">Всего групп:</label>
+              {{ teacher.group.count }}
+            </div>
+            <div class="mt-2 d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary me-2">Сохранить</button>
+              <div>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                  Удалить
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

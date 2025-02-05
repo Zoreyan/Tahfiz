@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Преподаватели <sup class="text-muted fs-6">({{ teachers.count }})</sup>
+  </span>
+  <a href="{% url 'teacher-create' %}" class="btn btn-primary no-print">Создать</a>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Предметы</th>
+            <th style="width: 30px;">Всего групп</th>
+            <th style="width: 30px;">Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for teacher in teachers %}
+          <div class="modal fade" id="modalCenter-{{ teacher.id }}" tabindex="-1" style="display: none;"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalCenterTitle">Удаление преподавателя</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Удалить преподавателя {{ teacher.name }}?
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'teacher-delete' teacher.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <tr>
+            <td>
+              <a href="{% url 'teacher-details' teacher.id %}">{{ teacher.name }}</a>
+            </td>
+            <td><span class="">{{ teacher.phone }}</span></td>
+            <td>
+              {% for i in teacher.subjects.all %}
+                <span class="me-2">
+                  {{ i }}
+                </span>
+              {% endfor %}
+            </td>
+            <td>
+              <span class="">{{ teacher.group.count }}</span>
+            </td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i
+                    class="bx bx-dots-vertical-rounded"></i></button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                    data-bs-target="#modalCenter-{{ teacher.id }}">
+                    <i class="bx bx-trash me-1"></i>
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

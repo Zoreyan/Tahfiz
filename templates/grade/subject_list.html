@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <span class="fs-2 fw-bold">
+    Журнал {{ group.title }}<sup class="text-muted fs-6">Выберите предмет</sup>
+  </span>
+</div>
+<div class='row'>
+    {% for subject in subjects %}
+    <div class="col-md-3 col-xl-2 mb-2">
+    <a href="{% url 'grade-list' group.id subject.id  %}" class="card bg-primary text-white">
+      <div class="card-body">
+        <span class="card-title text-white">{{ subject.name }}</span>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}
