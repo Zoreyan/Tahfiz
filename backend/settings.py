@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'apps.salary',
     'apps.exam',
     'apps.grade',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {

@@ -3,6 +3,7 @@ from apps.student.models import Student
 from apps.group.models import Group
 from apps.grade.models import Grade
 from apps.transaction.models import Transaction
+from apps.schedule.models import *
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -27,4 +28,9 @@ class GradeSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
+        fields = '__all__'
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
         fields = '__all__'

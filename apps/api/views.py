@@ -69,3 +69,26 @@ class TransactionListAPIView(views.APIView):
         return Response(serializer.data)
     
     # Hello world
+
+class ScheduleAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format=None):
+        student = Student.objects.get(user__id=request.user.id)
+        groups = Group.objects.filter(student=student).order_by('-id')
+        serializer = GroupSerializer(groups, many=True)
+        return Response(serializer.data)
+
+class AllSchedulesAPIView(views.APIView):
+
+    def get(self, request, format=None):
+        groups = Group.objects.select_related('student').order_by('id')
+        serializer = GroupSerializer(groups, many=True)
+        return Response(serializer.data)
+
+class StudentListView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
