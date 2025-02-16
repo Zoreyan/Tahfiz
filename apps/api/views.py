@@ -84,11 +84,3 @@ class AllSchedulesAPIView(views.APIView):
         groups = Group.objects.select_related('student').order_by('id')
         serializer = GroupSerializer(groups, many=True)
         return Response(serializer.data)
-
-class StudentListView(views.APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        students = Student.objects.all()
-        serializer = StudentSerializer(students, many=True)
-        return Response(serializer.data)

@@ -24,7 +24,6 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('student/', StudentRetrieveView.as_view(), name='student_retrieve_api'),
-    path('students/', StudentListView.as_view(), name='students_retrieve_api'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('schedule/', ScheduleAPIView.as_view(), name='schedule_api'),
     path('schedules/all/', AllSchedulesAPIView.as_view(), name='all_schedules_api'),
